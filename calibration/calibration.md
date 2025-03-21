@@ -27,3 +27,4 @@ An instructional video that shows the procedure can be found here: https://www.y
 
 ## Setting the calibration parameters
 - Write the determined parameters into the calibration_parameters.cpp file.
+- For the simple magnetic calibration, use magOffsets and magSlopes. If the magneto calibration is done, use magBias and softIron.
