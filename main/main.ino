@@ -17,16 +17,6 @@ int precisions[] = {1, 5, 4}; // This array holds the digits precision needed fo
 
 
 void setup() {
-  // Initialize ESC and Servo
-  esc.attach(escPin); // Attach the ESC to the specified pin
-  myservo.attach(servoPin); // Attach the servo to the specified pin
-
-  esc.writeMicroseconds(0); // Ensure the motor is off
-  delay(10000); // Wait 10 seconds to connect the battery
-
-  esc.writeMicroseconds(minPulseWidth); // Arm the ESC
-  delay(2000); // Wait 2 seconds for arming
-
   // Set I2C pins
   Wire.setSDA(I2C_SDA);
   Wire.setSCL(I2C_SCL);
