@@ -18,28 +18,13 @@ bool setup_sd_card()
 }
 
 
-bool write_data_to_file(const char* filename, int array_number, float* sensor_arrays[], size_t array_sizes[], int precision[]) 
+bool write_data_to_file(const char* filename, const char* data_string) 
 {
-  // this function writes all data from all sensors to SD card as comma-separated values
+  // the data_string is already formed as a global variable in main
+  // so we just need to write this string to file
   File file = SD.open(filename, FILE_WRITE);
-  if (!file) {
-    return false;
-  }
-
-  // Loop through each sensor array
-  for (int i = 0; i < array_number; i++) {
-    float* array = sensor_arrays[i];
-    size_t size = array_sizes[i];
-
-    for (size_t j = 0; j < size; j++) {
-      file.print(array[j], precision[i]);  // Use the corresponding precision for each sensor
-      if (i < array_number - 1 || j < size - 1) {
-        file.print(", ");
-      }
-    }
-  }
-
-  file.println();
+  if (!file) return false;
+  file.println(data_string);
   file.close();
   return true;
 }
