@@ -1,5 +1,3 @@
-#define DEBUG_MODE //comment this line when the device is going on mission (avoids serial prints that are unnecessary because no one is reading them)
-
 //I2C pins (BME280, GPS, LSM9DS1)
 //Attention to I2C Bus! If using I2C0 bus, we need to use Wire
 //if using I2C1 bus (check pico pinout), we need to use Wire1 and change accordingly in setup functions
@@ -16,7 +14,7 @@
 #define RF95_RST 9
 #define RF95_G0 0
 #define RF95_FREQ 433.4
-#define MAX_MESSAGE_SIZE_RF95 251
+#define MESSAGE_BUFFER_SIZE 275
 // Define the CanSat's and the ground station's address
 #define CANSAT_ADDRESS 42
 #define GND_STATION_ADDRESS 211
