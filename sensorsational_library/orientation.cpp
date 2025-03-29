@@ -6,10 +6,10 @@
 SF orientation_filter;
 
 float pitch, roll, yaw, Xh, Yh;
-static float magheading;
+float magheading;
 float deltat;
 
-float update_mag_heading(int execution_number)
+void update_mag_heading(int execution_number)
 {
 	for (int i=0; i < execution_number; i++)
 	{
@@ -31,5 +31,4 @@ float update_mag_heading(int execution_number)
 	  	if (magheading < 0)
 	    	magheading += 360;		
 	}
-    return magheading;
 }

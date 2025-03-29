@@ -36,7 +36,7 @@ bool setup_rf95(RH_RF95& rf95_object)
   rf95_object.setHeaderTo(GND_STATION_ADDRESS);
 
   // power from 5 to 23 dB. Always set false!
-  rf95_object.setTxPower(8, false);
+  rf95_object.setTxPower(23, false);
   if (rf95_init_status)
     return true;
   else
@@ -99,7 +99,5 @@ void send_data_rf95(RH_RF95& rf95_object, char* buffer) {
     
     // Optional debug output
     Serial.print("Sent ");
-    Serial.print(message_len);
-    Serial.print(" bytes: ");
     Serial.println(buffer);
 }

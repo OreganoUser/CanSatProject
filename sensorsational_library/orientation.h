@@ -2,7 +2,7 @@
 #define ORIENTATION_H
 
 
-
-float update_mag_heading(int execution_number);
+extern float magheading;
+void update_mag_heading(int execution_number);
 
 #endif //ORIENTATION_H

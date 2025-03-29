@@ -1,16 +1,22 @@
 #include "direction_control.h"
 #include <math.h>
+#include "gps_functions.h" // needed to access current pos
+#include "orientation.h" // needed to access current heading
+#include "general_definitions.h" // needed to access target pos
 
 
-
-void adjustDirection(float targetLat, float targetLon) {
+void adjustDirection()
+{
+  // this function gets current position from gps and current heading from magnetometer
+  // and calculates the needed adjustment to head towards target coordinates
+  // the target coordinates are defined in general_definitions.h as TARGET_LAT and TARGET_LON
   float currentLat = gps_data[1];
   float currentLon = gps_data[2];
-  float currentHeading = calibrated_lsm_data[8];
+  float currentHeading = magheading;
 
   float phi1 = currentLat * M_PI / 180.0;
-  float phi2 = targetLat * M_PI / 180.0;
-  float dLon = (targetLon - currentLon) * M_PI / 180.0;
+  float phi2 = TARGET_LAT * M_PI / 180.0;
+  float dLon = (TARGET_LON - currentLon) * M_PI / 180.0;
 
   // Variablen für atan2
   float y = sin(dLon) * cos(phi2);
@@ -31,7 +37,7 @@ void adjustDirection(float targetLat, float targetLon) {
     turnRight();
   }
 }
- 
+
 void turnLeft() {
     Serial.println("Turning Left");
 }
@@ -42,27 +48,4 @@ void turnRight() {
  
 void moveForward() {
     Serial.println("Vollgas!");
-}
-
-void aimSatellite() {
-  if (Serial.available() > 0) {
-    String input = Serial.readStringUntil('\n');
-    input.trim();
-    if (input.startsWith("AIM")) {
-      int firstSpace = input.indexOf(' ');
-      if (firstSpace != -1) {
-        String coords = input.substring(firstSpace + 1);
-        coords.trim();
-        int spaceIndex = coords.indexOf(' ');
-        if (spaceIndex != -1) {
-          String latStr = coords.substring(0, spaceIndex);
-          String lonStr = coords.substring(spaceIndex + 1);
-          targetLat = latStr.toFloat();
-          targetLon = lonStr.toFloat();
-          targetSet = true;
-          Serial.println("Zielkoordinaten gesetzt!");
-        }
-      }
-    }
-  }
 }
