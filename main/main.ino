@@ -14,10 +14,10 @@ Servo servo;
 
 // Create one structure that contains all sensor variable arrays
 // Arrays for sensor variables are already defined in the respective function files
-int number_of_arrays = 3;
-float* data_arrays[] = {bme_data, gps_data, calibrated_lsm_data};
-size_t data_array_sizes[] = {4, 6, 9};
-int precisions[] = {1, 5, 4}; // This array holds the digits precision needed for each sensor
+int number_of_arrays = 5;
+float* data_arrays[] = {bme_data, gps_data, calibrated_lsm_data, orientation_data, flight_stage_data};
+size_t data_array_sizes[] = {4, 6, 9, 4, 1};
+int precisions[] = {1, 5, 4, 0, 0}; // This array holds the digits precision needed for each sensor
 // Create buffer for data string
 char data_string[MESSAGE_BUFFER_SIZE] = {0};
 
@@ -50,7 +50,7 @@ void setup() {
   setup_rf95(rf95);
 
   //Servo
-  servo.attach(SERVO_PIN);
+  //servo.attach(SERVO_PIN);
 
   delay(1000);
 }
@@ -73,8 +73,9 @@ void loop() {
   // less than that gives bad accuracy
   // much more (for example 1000) slows execution down by quite a bit
   update_mag_heading(100);
-  Serial.println(magheading);
-
+  // magnetic heading
+  Serial.println(orientation_data[0]);
+  /*
   // calculate flight stage
   calc_flight_stage();
 
@@ -100,5 +101,5 @@ void loop() {
       adjustDirection();     
     }
   }
-
+  */
 }
