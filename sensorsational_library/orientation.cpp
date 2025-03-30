@@ -3,10 +3,14 @@
 #include "lsm9ds1_functions.h"
 #include <SensorFusion.h>
 
+// define inertial measurement filter
 SF orientation_filter;
 
-float pitch, roll, yaw, Xh, Yh;
-float magheading;
+// orientation data
+// magheading, yaw, roll, pitch
+float orientation_data[4] = {0.0, 0.0, 0.0, 0.0};
+
+float Xh, Yh;
 float deltat;
 
 void update_mag_heading(int execution_number)
@@ -19,16 +23,16 @@ void update_mag_heading(int execution_number)
 		orientation_filter.MadgwickUpdate(calibrated_lsm_data[3], -calibrated_lsm_data[4], calibrated_lsm_data[5], calibrated_lsm_data[0] ,-calibrated_lsm_data[1], calibrated_lsm_data[2], calibrated_lsm_data[6], -calibrated_lsm_data[7], calibrated_lsm_data[8], deltat);
 	  	
 	  	// calculate euler angles
-	  	pitch = orientation_filter.getPitch();
-	  	roll = orientation_filter.getRoll();
-	  	yaw = orientation_filter.getYaw();
+	  	orientation_data[3] = orientation_filter.getPitch();
+	  	orientation_data[2] = orientation_filter.getRoll();
+	  	orientation_data[1] = orientation_filter.getYaw();
 
-	  	// calculating magnetic heading (much stabler than yaw calculation)
+	  	// calculating magnetic heading (much stabler than simple yaw calculation)
 	  	// from https://avionicsduino.com/index.php/en/digital-compass/
-	  	Xh = calibrated_lsm_data[6] * cos(pitch / 180 * PI) - calibrated_lsm_data[8] * sin(pitch / 180 * PI);
-	  	Yh = -calibrated_lsm_data[6] * sin(roll / 180 * PI) * sin(pitch / 180 * PI) - calibrated_lsm_data[7] * cos(roll / 180 * PI) + calibrated_lsm_data[6] * sin(roll / 180 * PI) * cos(pitch / 180 * PI);
-	  	magheading = 180 - atan2(Yh, Xh) * 180 / PI;
-	  	if (magheading < 0)
-	    	magheading += 360;		
+	  	Xh = calibrated_lsm_data[6] * cos(orientation_data[3] / 180 * PI) - calibrated_lsm_data[8] * sin(orientation_data[3] / 180 * PI);
+	  	Yh = -calibrated_lsm_data[6] * sin(orientation_data[2] / 180 * PI) * sin(orientation_data[3]/ 180 * PI) - calibrated_lsm_data[7] * cos(orientation_data[2] / 180 * PI) + calibrated_lsm_data[6] * sin(orientation_data[2] / 180 * PI) * cos(orientation_data[3] / 180 * PI);
+	  	orientation_data[0] = 180 - atan2(Yh, Xh) * 180 / PI;
+	  	if (orientation_data[0] < 0)
+	    	orientation_data[0] += 360;		
 	}
 }

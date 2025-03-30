@@ -83,9 +83,6 @@ void create_data_string(char* output_buffer, int package_number, float* data_arr
     } else {
         *ptr = '\0'; // empty string case
     }
-    
-    // Fill the rest with a special character if you want (optional)
-    //memset(ptr, 0xFF, remaining_space + 1); // Example: fill with 0xFF
 }
 
 
