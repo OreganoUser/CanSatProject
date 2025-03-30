@@ -8,6 +8,7 @@
 
 extern Adafruit_GPS gps;
 extern float gps_data[];
+extern int gps_precisions[];
 bool setup_gps(Adafruit_GPS& gps_object);
 float convert_coord_to_decimal(float degmin);
 void get_gps_data(float gps_data[]);

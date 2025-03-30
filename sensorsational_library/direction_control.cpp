@@ -12,7 +12,7 @@ void adjustDirection()
   // the target coordinates are defined in general_definitions.h as TARGET_LAT and TARGET_LON
   float currentLat = gps_data[1];
   float currentLon = gps_data[2];
-  float currentHeading = orientation_data[0];
+  float currentHeading = orientation_data[0]; //magheading
 
   float phi1 = currentLat * M_PI / 180.0;
   float phi2 = TARGET_LAT * M_PI / 180.0;

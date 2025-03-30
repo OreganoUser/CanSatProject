@@ -46,18 +46,13 @@ bool setup_rf95(RH_RF95& rf95_object)
 
 
 void create_data_string(char* output_buffer, int package_number, float* data_arrays[], 
-                       size_t* data_array_sizes, int number_of_arrays, int precision[]) {
-    // we are writing to the string output_buffer that was created beforehand
-    // this string has the length MESSAGE_BUFFER_SIZE which is long enough (set in general_definitions)
-    // the rest of this function is deepseek magic
-    // Start building the string
+                       size_t* data_array_sizes, int number_of_arrays, int* precision[]) {
     char* ptr = output_buffer;
     int remaining_space = MESSAGE_BUFFER_SIZE - 1; // Reserve 1 byte for null terminator
     
     // Write package number
     int written = snprintf(ptr, remaining_space, "%d,", package_number);
     if (written < 0 || written >= remaining_space) {
-        // Truncation occurred or error
         *output_buffer = '\0';
         return;
     }
@@ -67,9 +62,14 @@ void create_data_string(char* output_buffer, int package_number, float* data_arr
     // Write all data points
     for (int i = 0; i < number_of_arrays && remaining_space > 0; i++) {
         for (size_t j = 0; j < data_array_sizes[i] && remaining_space > 0; j++) {
-            written = snprintf(ptr, remaining_space, "%.*f,", precision[i], data_arrays[i][j]);
+            // Check if precision is 0 (omit decimal point)
+            if (precision[i][j] == 0) {
+                written = snprintf(ptr, remaining_space, "%.0f,", data_arrays[i][j]);
+            } else {
+                written = snprintf(ptr, remaining_space, "%.*f,", precision[i][j], data_arrays[i][j]);
+            }
+            
             if (written < 0 || written >= remaining_space) {
-                // Truncation occurred or error
                 break;
             }
             ptr += written;
@@ -77,11 +77,11 @@ void create_data_string(char* output_buffer, int package_number, float* data_arr
         }
     }
     
-    // Replace the last comma with null terminator if we wrote anything
+    // Replace the last comma with null terminator
     if (ptr > output_buffer) {
         *(ptr - 1) = '\0';
     } else {
-        *ptr = '\0'; // empty string case
+        *ptr = '\0';
     }
 }
 

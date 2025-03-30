@@ -9,6 +9,7 @@ SF orientation_filter;
 // orientation data
 // magheading, yaw, roll, pitch
 float orientation_data[4] = {0.0, 0.0, 0.0, 0.0};
+int orientation_precisions[4] = {0, 0, 0, 0};
 
 float Xh, Yh;
 float deltat;

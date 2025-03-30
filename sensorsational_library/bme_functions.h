@@ -6,6 +6,7 @@
 
 extern Adafruit_BME280 bme;
 extern float bme_data[];
+extern int bme_precisions[];
 bool setup_bme(Adafruit_BME280& bme_object);
 void get_bme_data(float bme_data[]);
 

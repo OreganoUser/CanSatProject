@@ -7,6 +7,7 @@ Adafruit_BME280 bme;
 // BME variables
 // saves temperature, pressure, altitude and humidity
 float bme_data[4] = {0.0, 0.0, 0.0, 0.0};
+int bme_precisions[4] = {1, 1, 1, 0};
 
 
 bool setup_bme(Adafruit_BME280& bme_object)

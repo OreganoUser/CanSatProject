@@ -5,6 +5,7 @@ Adafruit_GPS gps(&Wire);
 //GPS variables
 //gps fix, latitude, longitude, altitude, speed, angle
 float gps_data[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+int gps_precisions[6] = {0, 5, 5, 1, 3, 0};
 
 bool setup_gps(Adafruit_GPS& gps_object)
 {

@@ -7,6 +7,7 @@ Adafruit_LSM9DS1 lsm(&Wire);
 //LSM9DS1 variables
 //ax, ay, az, gx, gy, gz, mx, my, mz
 float lsm_data[9] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+int lsm_precisions[9] = {4, 4, 4, 4, 4, 4, 4, 4, 4};
 float bias_corrected_magnetic[3] = {0.0, 0.0, 0.0};
 float calibrated_lsm_data[9] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 

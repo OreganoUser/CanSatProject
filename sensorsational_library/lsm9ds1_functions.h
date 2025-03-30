@@ -8,6 +8,7 @@
 
 extern Adafruit_LSM9DS1 lsm;
 extern float lsm_data[9];
+extern int lsm_precisions[9];
 extern float calibrated_lsm_data[9];
 extern float bias_corrected_magnetic[3];
 extern sensors_event_t a, m, g, temp;

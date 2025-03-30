@@ -19,6 +19,7 @@ bool arms_deployed = false;
 // the float array holds the flight stage integer
 // having it as float is easier to write to SD card or send via LoRa
 float flight_stage_data[1] = {-1.0};
+int flight_stage_precisions[1] = {0};
 
 void calc_flight_stage()
 {
