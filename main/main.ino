@@ -17,7 +17,8 @@ Servo servo;
 int number_of_arrays = 5;
 float* data_arrays[] = {bme_data, gps_data, calibrated_lsm_data, orientation_data, flight_stage_data};
 size_t data_array_sizes[] = {4, 6, 9, 4, 1};
-int precisions[] = {1, 5, 4, 0, 0}; // This array holds the digits precision needed for each sensor
+// This array holds the digits precision needed for each of the sensor variables
+int* precisions[] = {bme_precisions, gps_precisions, lsm_precisions, orientation_precisions, flight_stage_precisions}; 
 // Create buffer for data string
 char data_string[MESSAGE_BUFFER_SIZE] = {0};
 
@@ -74,6 +75,7 @@ void loop() {
   // much more (for example 1000) slows execution down by quite a bit
   update_mag_heading(100);
   // magnetic heading
+  // magnetic heading is only valid if calibration has been done previously!
   Serial.println(orientation_data[0]);
   /*
   // calculate flight stage
