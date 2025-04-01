@@ -59,6 +59,13 @@ void setup() {
 int iteration_counter = 0;
 
 void loop() {
+  // Estimate heading using LSM9DS1
+  // This should be done as a first step because direction control needs accurate values
+  // and we need to send it back to ground station, so it needs to happen before sending!
+  // the number in update_mag_heading should be about 100 (200 should also work)
+  // less than that gives bad accuracy
+  // much more (for example 1000) slows execution down by quite a bit
+  update_mag_heading(100);
   // Execute sensor data collection and writing functions
   get_bme_data(bme_data);
   get_gps_data(gps_data);
@@ -68,19 +75,12 @@ void loop() {
   write_data_to_file(logfile_name, data_string);
   send_data_rf95(rf95, data_string);
   iteration_counter++;
-
-  // Estimate heading using LSM9DS+
-  // the number in update_mag_heading should be about 100 (200 should also work)
-  // less than that gives bad accuracy
-  // much more (for example 1000) slows execution down by quite a bit
-  update_mag_heading(100);
-  // magnetic heading
-  // magnetic heading is only valid if calibration has been done previously!
-  Serial.println(orientation_data[0]);
-  /*
+  
   // calculate flight stage
-  calc_flight_stage();
-
+  // wait for 10 first data points so that sensor stabilize values
+  if (iteration_counter > 10)
+    calc_flight_stage();
+  /*
   if (flight_stage == 3)
   {
     // detected drop, deploy arms
@@ -95,7 +95,7 @@ void loop() {
     arms_deployed = false;
   }
 
-  if (flight_stage >= 3)
+  if (flight_stage == 3)
   {
     if (arms_deployed) // make sure arms are deployed!
     {
@@ -104,4 +104,6 @@ void loop() {
     }
   }
   */
+  Serial.println(orientation_data[0]);
+  adjustDirection();
 }

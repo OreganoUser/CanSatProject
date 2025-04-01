@@ -40,7 +40,7 @@
 #define MOTOR1_PIN 14
 #define MOTOR2_PIN 13
 
-#define SEA_LEVEL_PRESSURE 1017 // needs to be changed the day of launch so that bme calculates correct altitude
+#define SEA_LEVEL_PRESSURE 1023 // needs to be changed the day of launch so that bme calculates correct altitude
 
 // for calibration
 #define gravity 9.809  // Gravity constant
@@ -53,10 +53,10 @@
 #define FULL_CAL
 
 // define target coordinates (centre of Lux for now)
-#define TARGET_LON 49.8153
-#define TARGET_LAT 6.1296
+#define TARGET_LON 6.1296
+#define TARGET_LAT 0
 
 // define threshold and meters_delay to determine flight stage
 // threshold contains the altitude at which we can say that the cansat has actually been lifted by the rocket
-#define THRESHOLD 700
-#define METERS_DELAY 10 
+#define THRESHOLD 333
+#define METERS_DELAY 3
