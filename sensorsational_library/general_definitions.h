@@ -52,9 +52,10 @@
 //#define SIMPLE_CAL
 #define FULL_CAL
 
-// define target coordinates (centre of Lux for now)
-#define TARGET_LON 6.1296
-#define TARGET_LAT 0
+// define target coordinates (Paris for now)
+#define TARGET_LAT 48.8575
+#define TARGET_LON 2.3514
+
 
 // define threshold and meters_delay to determine flight stage
 // threshold contains the altitude at which we can say that the cansat has actually been lifted by the rocket

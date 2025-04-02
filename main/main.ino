@@ -10,17 +10,26 @@
 #include <Servo.h>
 #include "flight_stages.h"
 
+//define servo array (maybe create a new file for motor/servo control instead)
 Servo servo;
 
-// Create one structure that contains all sensor variable arrays
+// define array for saving timestamp
+float time_array[1] = {0.0};
+int time_precisions[1] = {1};
+
+// Create one structure that contains all variable arrays
 // Arrays for sensor variables are already defined in the respective function files
-int number_of_arrays = 5;
-float* data_arrays[] = {bme_data, gps_data, calibrated_lsm_data, orientation_data, flight_stage_data};
-size_t data_array_sizes[] = {4, 6, 9, 4, 1};
+int number_of_arrays = 6;
+float* data_arrays[] = {time_array, bme_data, gps_data, calibrated_lsm_data, orientation_data, flight_stage_data};
+size_t data_array_sizes[] = {1, 4, 6, 9, 4, 1};
 // This array holds the digits precision needed for each of the sensor variables
-int* precisions[] = {bme_precisions, gps_precisions, lsm_precisions, orientation_precisions, flight_stage_precisions}; 
+int* precisions[] = {time_precisions, bme_precisions, gps_precisions, lsm_precisions, orientation_precisions, flight_stage_precisions};
+
 // Create buffer for data string
 char data_string[MESSAGE_BUFFER_SIZE] = {0};
+
+// counts how many times loop is executed
+int iteration_counter = 0;
 
 
 void setup() {
@@ -52,11 +61,11 @@ void setup() {
 
   //Servo
   //servo.attach(SERVO_PIN);
-
   delay(1000);
+  // start time measurement (in seconds)
+  time_array[0] = millis() / 1000.0;
 }
 
-int iteration_counter = 0;
 
 void loop() {
   // Estimate heading using LSM9DS1
@@ -70,40 +79,16 @@ void loop() {
   get_bme_data(bme_data);
   get_gps_data(gps_data);
   get_calibrated_lsm9ds1_data(lsm, calibrated_lsm_data, bias_corrected_magnetic);
+  //update timestamp (in s)
+  time_array[0] = millis() / 1000.0;
   create_data_string(data_string, iteration_counter, data_arrays, data_array_sizes, number_of_arrays, precisions);
   // need to do create_data_string before write_data_to_file!!!
   write_data_to_file(logfile_name, data_string);
   send_data_rf95(rf95, data_string);
   iteration_counter++;
   
-  // calculate flight stage
-  // wait for 10 first data points so that sensor stabilize values
-  if (iteration_counter > 10)
-    calc_flight_stage();
-  /*
-  if (flight_stage == 3)
-  {
-    // detected drop, deploy arms
-    servo.write(180);
-    arms_deployed = true;
-  }
+  // calculate flight stage here and do actions (deploy arms, adjust direction etc) (not working well now)
 
-  if (flight_stage == 4)
-  {
-    // close to ground, close arms again
-    servo.write(0);
-    arms_deployed = false;
-  }
-
-  if (flight_stage == 3)
-  {
-    if (arms_deployed) // make sure arms are deployed!
-    {
-      // adjust direction
-      adjustDirection();     
-    }
-  }
-  */
   Serial.println(orientation_data[0]);
   adjustDirection();
 }
