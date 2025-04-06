@@ -57,6 +57,8 @@ void setup() {
   // Else: SPI has problems and it won't work
   setup_rf95(rf95);
 
+  initMotors(); //esc's
+
   //Servo
   //servo.attach(SERVO_PIN);
   delay(1000);
