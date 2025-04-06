@@ -9,6 +9,14 @@
 extern bool arms_deployed;
 Servo servo_arms;
 
+Servo escLeft;
+Servo escRight;
+
+void initMotors() {
+  escLeft.attach(MOTOR1_PIN);
+  escRight.attach(MOTOR2_PIN);
+}
+
 void adjustDirection()
 {
 
@@ -54,12 +62,18 @@ void adjustDirection()
 
 void turnLeft() {
     Serial.println("Turning Left");
+    escLeft.writeMicroseconds(1000);
+    escRight.writeMicroseconds(1500);
 }
  
 void turnRight() {
     Serial.println("Turning Right");
+    escLeft.writeMicroseconds(1500);
+    escRight.writeMicroseconds(1000);
 }
  
 void moveForward() {
     Serial.println("Vollgas!");
+    escLeft.writeMicroseconds(1500);
+    escRight.writeMicroseconds(1500);
 }

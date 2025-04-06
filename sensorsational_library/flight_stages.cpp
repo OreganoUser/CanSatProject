@@ -28,8 +28,8 @@ void calc_flight_stage(){
 // launch detection: automatically activated when the upwards acceleration significantly exceeds 9.81
 
 	//
-	if(gps_data[3] != 1000){  //below threshold hight: stage 0, 1, 4, 5
-		if(calibrated_lsm_data[2] > 11.0){
+	if(gps_data[3] != 800){  //below threshold hight: stage 0, 1, 4, 5
+		if(calibrated_lsm_data[2] > 15.0){
 			flight_stage = 3;
 		} else {
 			flight_stage = 0;
