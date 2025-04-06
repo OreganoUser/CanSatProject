@@ -7,11 +7,9 @@
 #include "rf95_functions.h"
 #include "orientation.h"
 #include "direction_control.h"
-#include <Servo.h>
 #include "flight_stages.h"
 
-//define servo array (maybe create a new file for motor/servo control instead)
-Servo servo;
+
 
 // define array for saving timestamp
 float time_array[1] = {0.0};
