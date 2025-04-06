@@ -5,6 +5,7 @@
 
 #define TOLERANCE 5.0  // tolerance for the right angle
 
+extern bool arms_deployed;
 void adjustDirection();
 void turnLeft();
 void turnRight();

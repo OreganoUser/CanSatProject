@@ -1,12 +1,25 @@
 #include "direction_control.h"
-#include <math.h>
+#include "flight_stages.h"
+#include "math.h"
+#include "Servo.h"
 #include "gps_functions.h" // needed to access current pos
 #include "orientation.h" // needed to access current heading
 #include "general_definitions.h" // needed to access target pos
 
+extern bool arms_deployed;
+Servo servo_arms;
 
 void adjustDirection()
 {
+
+  if(flight_stage == 3 && !arms_deployed){
+    Serial.println("Deploying Arms");
+    servo_arms.write(90);
+    arms_deployed = true;
+  }
+
+  if(arms_deployed && flight_stage == 3){
+
   // this function gets current position from gps and current magnetic heading from orientation
   // and calculates the needed adjustment to head towards target coordinates
   // the target coordinates are defined in general_definitions.h as TARGET_LAT and TARGET_LON
@@ -36,6 +49,7 @@ void adjustDirection()
   } else {
     turnRight();
   }
+}
 }
 
 void turnLeft() {

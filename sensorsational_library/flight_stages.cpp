@@ -1,5 +1,6 @@
 #include "flight_stages.h"
-#include "bme_functions.h"
+#include "lsm9ds1_functions.h"
+#include "gps_functions.h"
 #include "general_definitions.h"
 
 //these functions are intended to evaluate the flight stages of the cansat.
@@ -12,8 +13,9 @@
 
 
 int flight_stage = -1;
-float max_altitude = 0;
-float min_altitude = 10000; // needs to be initialised as large value
+//float max_altitude = 0;
+//float min_altitude = 10000; // needs to be initialised as large value
+float previousAltitude = 0; //used for drop detection
 // arms_deployed is true if arms deployed
 bool arms_deployed = false;
 // the float array holds the flight stage integer
@@ -21,7 +23,42 @@ bool arms_deployed = false;
 float flight_stage_data[1] = {-1.0};
 int flight_stage_precisions[1] = {0};
 
-void calc_flight_stage()
+
+void calc_flight_stage(){
+// launch detection: automatically activated when the upwards acceleration significantly exceeds 9.81
+
+	//
+	if(gps_data[3] != 1000){  //below threshold hight: stage 0, 1, 4, 5
+		if(calibrated_lsm_data[2] > 11.0){
+			flight_stage = 3;
+		} else {
+			flight_stage = 0;
+		}
+		
+	} else { //over threshold height: stage 2, 3
+		if(gps_data[3] < previousAltitude){
+			flight_stage = 3;
+		} else {
+			flight_stage == 2;
+			previousAltitude = gps_data[3];
+		}
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*void calc_flight_stage()
 {
 	// bme_data[2] contains current altitude
 	// first update max and min
@@ -60,4 +97,4 @@ void calc_flight_stage()
 		}
 	}
 	flight_stage_data[0] = flight_stage;
-}
+} */
