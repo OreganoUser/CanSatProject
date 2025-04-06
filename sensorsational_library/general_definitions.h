@@ -61,3 +61,4 @@
 // threshold contains the altitude at which we can say that the cansat has actually been lifted by the rocket
 #define THRESHOLD 333
 #define METERS_DELAY 3
+#define LAUNCH_ACCELERATION 15

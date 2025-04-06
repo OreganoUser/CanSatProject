@@ -3,6 +3,7 @@
 
 //extern float max_altitude;
 extern float previousAltitude;
+extern float momentary_acceleration;
 extern int flight_stage;
 extern float flight_stage_data[1];
 extern int flight_stage_precisions[1];
