@@ -58,6 +58,9 @@ void setup() {
   setup_rf95(rf95);
 
   initMotors(); //esc's
+    escLeft.writeMicroseconds(0);
+    escRight.writeMicroseconds(0);
+    arms_deployed = false;
 
   //Servo
   //servo.attach(SERVO_PIN);
@@ -86,6 +89,11 @@ void loop() {
   write_data_to_file(logfile_name, data_string);
   send_data_rf95(rf95, data_string);
   iteration_counter++;
+
+  // automatic
+  calc_flight_stage();
+  //manual
+  //manual_flight_stage_override();
   
   // calculate flight stage here and do actions (deploy arms, adjust direction etc) (not working well now)
 
