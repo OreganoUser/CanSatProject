@@ -12,6 +12,7 @@ Servo servo_arms;
 Servo escLeft;
 Servo escRight;
 
+
 void initMotors() {
   escLeft.attach(MOTOR1_PIN);
   escRight.attach(MOTOR2_PIN);
@@ -22,8 +23,10 @@ void adjustDirection()
 
   if(flight_stage == 3 && !arms_deployed){
     Serial.println("Deploying Arms");
-    servo_arms.write(90);
+    servo_arms.write(0);
     arms_deployed = true;
+  } else {
+    servo_arms.write(90);
   }
 
   if(arms_deployed && flight_stage == 3){
@@ -62,14 +65,14 @@ void adjustDirection()
 
 void turnLeft() {
     Serial.println("Turning Left");
-    escLeft.writeMicroseconds(1000);
+    escLeft.writeMicroseconds(1300);
     escRight.writeMicroseconds(1500);
 }
  
 void turnRight() {
     Serial.println("Turning Right");
     escLeft.writeMicroseconds(1500);
-    escRight.writeMicroseconds(1000);
+    escRight.writeMicroseconds(1300);
 }
  
 void moveForward() {

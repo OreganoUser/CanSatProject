@@ -8,5 +8,6 @@ extern int flight_stage;
 extern float flight_stage_data[1];
 extern int flight_stage_precisions[1];
 void calc_flight_stage();
+void manual_flight_stage_override();
 
 #endif //FLIGHT_STAGES_H
