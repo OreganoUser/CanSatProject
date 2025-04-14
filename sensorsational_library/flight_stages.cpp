@@ -30,18 +30,25 @@ int flight_stage_precisions[1] = {0};
 
 	momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
 
-	if(gps_data[3] < THRESHOLD){  //below threshold hight: stage 0, 1, 4, 5
-		if( momentary_acceleration > LAUNCH_ACCELERATION){
+	if(gps_data[3] < THRESHOLD && flight_stage < 3){  //below threshold hight: stage 0, 1, 4, 5
+		if( momentary_acceleration > LAUNCH_ACCELERATION && flight_stage == 0){
 			flight_stage = 1;
-		} else {
+			Serial.println("Flight stage = 1");
+		} else if(flight_stage <= 0){
 			flight_stage = 0;
-		}
+			Serial.println("Flight stage = 0");
+		} /*else {
+			flight_stage = 4;
+			Serial.println("Flight stage = 4");
+		}*/
 		
 	} else { //over threshold height: stage 2, 3
 		if(gps_data[3] < previousAltitude){
 			flight_stage = 3;
+			Serial.println("Flight stage = 3");
 		} else {
-			flight_stage == 2;
+			flight_stage = 2;
+			Serial.println("Flight stage = 2");
 			previousAltitude = gps_data[3];
 		}
 

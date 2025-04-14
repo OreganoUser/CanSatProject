@@ -59,6 +59,6 @@
 
 // define threshold and meters_delay to determine flight stage
 // threshold contains the altitude at which we can say that the cansat has actually been lifted by the rocket
-#define THRESHOLD 70
+#define THRESHOLD 270
 #define METERS_DELAY 3
 #define LAUNCH_ACCELERATION 15
