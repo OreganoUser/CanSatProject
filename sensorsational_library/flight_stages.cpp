@@ -134,7 +134,7 @@ void calc_flight_stage() {
     float current_altitude = bme_data[2];
     unsigned long current_time = millis(); // aktuell Zäit fir d'Fallverzögerung
 
-    if(current_altitude == (previousAltitude + 5) || current_altitude == /(previousAltitude - 5)){ //kleng Toleranz
+    if(current_altitude == (previousAltitude + 5) || current_altitude == (previousAltitude - 5)){ //kleng Toleranz
 		flight_stage = 0; // An dessem fall ass flight_stage = 0 dat selwecht wei flight_stage = 4/5. Dei wichtegst Aufgab vun beiden ass, dass d'Motoren net dreinen an dofir kennen se och dei selwecht bleiwen
 		is_falling = false;
 		fall_start_time = 0;
