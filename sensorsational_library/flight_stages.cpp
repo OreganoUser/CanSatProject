@@ -2,6 +2,7 @@
 #include "lsm9ds1_functions.h"
 #include "gps_functions.h"
 #include "general_definitions.h"
+#include "bme_functions.h"
 
 //these functions are intended to evaluate the flight stages of the cansat.
 // 0 is pre-launch
@@ -25,54 +26,51 @@ float flight_stage_data[1] = {-1.0};
 int flight_stage_precisions[1] = {0};
 
 
- void calc_flight_stage(){
+ /*void calc_flight_stage(){
 // launch detection: automatically activated when the upwards acceleration significantly exceeds 9.81
+	Serial.print("height:");
+	Serial.println(bme_data[2]);
 
 	momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
 
 	if(gps_data[3] < THRESHOLD && flight_stage < 3){  //below threshold hight: stage 0, 1, 4, 5
 		if( momentary_acceleration > LAUNCH_ACCELERATION && flight_stage == 0){
 			flight_stage = 1;
-			Serial.println("Flight stage = 1");
 		} else if(flight_stage <= 0){
 			flight_stage = 0;
-			Serial.println("Flight stage = 0");
-		} /*else {
+		} else {
 			flight_stage = 4;
 			Serial.println("Flight stage = 4");
-		}*/
+		}
 		
 	} else { //over threshold height: stage 2, 3
 		if(gps_data[3] < previousAltitude){
 			flight_stage = 3;
-			Serial.println("Flight stage = 3");
 		} else {
 			flight_stage = 2;
-			Serial.println("Flight stage = 2");
 			previousAltitude = gps_data[3];
 		}
 
 	}
 
-} 
+	flight_stage_data[0] = (float)flight_stage;
+} */
 
 
 
-/*void manual_flight_stage_override() {
-    // Prüfe, ob Daten über den Serial Monitor eingetroffen sind
+/*void calc_flight_stage() {
+	//maluell
     if (Serial.available() > 0) {
-        // Lese das erste Zeichen
         char inputChar = Serial.read();
 
-        // Wenn es eine Ziffer zwischen '0' und '5' ist, setze den entsprechenden Flugstatus
         if (inputChar >= '0' && inputChar <= '5') {
             flight_stage = inputChar - '0';
             flight_stage_data[0] = (float)flight_stage;
-            Serial.print("Manuelle Flight-Stage-Uebersteuerung: ");
+            Serial.print("Manual flight_stage ");
             Serial.println(flight_stage);
         }
     }
-} 
+} */
 
 
 
@@ -87,6 +85,9 @@ int flight_stage_precisions[1] = {0};
 	// first update max and min
 	max_altitude = max(max_altitude, bme_data[2]);
 	min_altitude = min(min_altitude, bme_data[2]);
+
+	Serial.print("height:");
+	Serial.println(bme_data[2]);
 	
 	if (bme_data[2] <= THRESHOLD) // cases 0, 1, 4 and 5
 	{
@@ -121,3 +122,39 @@ int flight_stage_precisions[1] = {0};
 	}
 	flight_stage_data[0] = flight_stage;
 } */
+
+
+
+void calc_flight_stage() {
+	//As basic as possible. Less is more
+	previousAltitude = 0;
+    static unsigned long fall_start_time = 0;
+    static bool is_falling = false;
+
+    float current_altitude = bme_data[2];
+    unsigned long current_time = millis(); // aktuell Zäit fir d'Fallverzögerung
+
+    if(current_altitude == (previousAltitude + 5) || current_altitude == /(previousAltitude - 5)){ //kleng Toleranz
+		flight_stage = 0; // An dessem fall ass flight_stage = 0 dat selwecht wei flight_stage = 4/5. Dei wichtegst Aufgab vun beiden ass, dass d'Motoren net dreinen an dofir kennen se och dei selwecht bleiwen
+		is_falling = false;
+		fall_start_time = 0;
+	} else if (current_altitude > previousAltitude) {
+		if(bme_data[2] > THRESHOLD){
+			flight_stage == 2;
+		} else{
+        flight_stage = 1; 
+		}
+        is_falling = false;
+        fall_start_time = 0;
+    } else if (current_altitude < previousAltitude) {
+        if (!is_falling) {
+            is_falling = true;
+            fall_start_time = current_time;
+        } else if (current_time - fall_start_time >= 3000) {
+            flight_stage = 3;
+        }
+    }
+    previousAltitude = current_altitude;
+
+	flight_stage_data[0] = flight_stage;
+} 

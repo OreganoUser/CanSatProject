@@ -2,6 +2,7 @@
 #include "flight_stages.h"
 #include "math.h"
 #include "Servo.h"
+#include "Arduino.h"
 #include "gps_functions.h" // needed to access current pos
 #include "orientation.h" // needed to access current heading
 #include "general_definitions.h" // needed to access target pos
@@ -14,6 +15,8 @@ Servo escRight;
 
 
 void initMotors() {
+  servo_arms.attach(SERVO_PIN);
+  servo_arms.write(190);
   escLeft.attach(MOTOR1_PIN);
   escRight.attach(MOTOR2_PIN);
 }
@@ -21,12 +24,15 @@ void initMotors() {
 void adjustDirection()
 {
 
-  if(flight_stage == 3 && !arms_deployed){
+  if(flight_stage == 3){
     Serial.println("Deploying Arms");
-    servo_arms.write(0);
+    servo_arms.write(10);
     arms_deployed = true;
   } else {
-    servo_arms.write(90);
+    servo_arms.write(190);
+    arms_deployed = false;
+    escLeft.writeMicroseconds(0);
+    escRight.writeMicroseconds(0);
   }
 
   if(arms_deployed && flight_stage == 3){
@@ -65,18 +71,18 @@ void adjustDirection()
 
 void turnLeft() {
     Serial.println("Turning Left");
-    escLeft.writeMicroseconds(1300);
-    escRight.writeMicroseconds(1500);
+    escLeft.writeMicroseconds(1500);
+    escRight.writeMicroseconds(2000);
 }
  
 void turnRight() {
     Serial.println("Turning Right");
-    escLeft.writeMicroseconds(1500);
-    escRight.writeMicroseconds(1300);
+    escLeft.writeMicroseconds(2000);
+    escRight.writeMicroseconds(1500);
 }
  
 void moveForward() {
     Serial.println("Vollgas!");
-    escLeft.writeMicroseconds(1500);
-    escRight.writeMicroseconds(1500);
+    escLeft.writeMicroseconds(2000);
+    escRight.writeMicroseconds(2000);
 }

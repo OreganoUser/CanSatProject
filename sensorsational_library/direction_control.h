@@ -8,6 +8,7 @@
 
 extern bool arms_deployed;
 
+extern Servo servo_arms;
 extern Servo escLeft;
 extern Servo escRight;
 
