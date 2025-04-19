@@ -126,19 +126,28 @@ int flight_stage_precisions[1] = {0};
 
 
 void calc_flight_stage() {
+
 	//As basic as possible. Less is more
-	previousAltitude = 0;
     static unsigned long fall_start_time = 0;
     static bool is_falling = false;
+
+	previousAltitude;
+	static unsigned long last_update_time = 0;    // verzögerung fir dass previousAltitude net emmer selwecht ass wei current_altitude
+    const unsigned long UPDATE_INTERVAL = 2000UL;
 
     float current_altitude = bme_data[2];
     unsigned long current_time = millis(); // aktuell Zäit fir d'Fallverzögerung
 
-    if(current_altitude == (previousAltitude + 5) || current_altitude == (previousAltitude - 5)){ //kleng Toleranz
+	Serial.print("current_altitude:");
+	Serial.println(current_altitude);
+
+    if(current_altitude < (previousAltitude + 5) && current_altitude > (previousAltitude - 5)){ //kleng Toleranz
 		flight_stage = 0; // An dessem fall ass flight_stage = 0 dat selwecht wei flight_stage = 4/5. Dei wichtegst Aufgab vun beiden ass, dass d'Motoren net dreinen an dofir kennen se och dei selwecht bleiwen
 		is_falling = false;
 		fall_start_time = 0;
+		Serial.println("BBBBBBBBBBBBBBBBBBB");
 	} else if (current_altitude > previousAltitude) {
+		Serial.println("AAAAAAAAAAAAAAAAAAAAAA");
 		if(bme_data[2] > THRESHOLD){
 			flight_stage == 2;
 		} else{
@@ -147,14 +156,22 @@ void calc_flight_stage() {
         is_falling = false;
         fall_start_time = 0;
     } else if (current_altitude < previousAltitude) {
+		Serial.println("FALLING!!");
         if (!is_falling) {
             is_falling = true;
             fall_start_time = current_time;
-        } else if (current_time - fall_start_time >= 3000) {
+        } else if (current_time - fall_start_time >= 5000) { //Timedelay before falling
             flight_stage = 3;
         }
     }
-    previousAltitude = current_altitude;
+
+    if (current_time - last_update_time >= UPDATE_INTERVAL) {
+        previousAltitude     = current_altitude;
+        last_update_time     = current_time;
+	}
+
+	Serial.print("previous_altitude:");
+	Serial.println(previousAltitude);
 
 	flight_stage_data[0] = flight_stage;
 } 
