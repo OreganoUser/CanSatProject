@@ -18,6 +18,9 @@ int flight_stage = -1;
 //float min_altitude = 10000; // needs to be initialised as large value
 float previousAltitude = 0; //used for drop detection
 float momentary_acceleration = 0;
+
+static unsigned long fall_start_time = 0;
+static bool is_falling = false;
 // arms_deployed is true if arms deployed
 bool arms_deployed = false;
 // the float array holds the flight stage integer
@@ -162,8 +165,6 @@ void calc_flight_stage(){
 
 	momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
 
-	static unsigned long fall_start_time = 0;
-    static bool is_falling = false;
 	unsigned long current_time = millis();
 
 
