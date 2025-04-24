@@ -58,27 +58,6 @@ int flight_stage_precisions[1] = {0};
 
 
 
-/*void calc_flight_stage() {
-	//maluell
-    if (Serial.available() > 0) {
-        char inputChar = Serial.read();
-
-        if (inputChar >= '0' && inputChar <= '5') {
-            flight_stage = inputChar - '0';
-            flight_stage_data[0] = (float)flight_stage;
-            Serial.print("Manual flight_stage ");
-            Serial.println(flight_stage);
-        }
-    }
-} */
-
-
-
-
-
-
-
-
 /*void calc_flight_stage()
 {
 	// bme_data[2] contains current altitude
@@ -125,8 +104,9 @@ int flight_stage_precisions[1] = {0};
 
 
 
-void calc_flight_stage() {
+/*void calc_flight_stage() {
 
+	//Nemmen mam BME
 	//As basic as possible. Less is more
     static unsigned long fall_start_time = 0;
     static bool is_falling = false;
@@ -174,4 +154,61 @@ void calc_flight_stage() {
 	Serial.println(previousAltitude);
 
 	flight_stage_data[0] = flight_stage;
-} 
+} */
+
+
+void calc_flight_stage(){
+	//
+
+	momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
+
+	static unsigned long fall_start_time = 0;
+    static bool is_falling = false;
+	unsigned long current_time = millis();
+
+
+	if(!is_falling){
+		if(bme_data[2] > THRESHOLD){ //flight_stage 2 & 3
+			if(momentary_acceleration < FALL_ACCELERATION){
+				is_falling = true;
+				fall_start_time = current_time;
+
+			} else {
+				flight_stage = 2;
+			}
+
+		} else if (momentary_acceleration > LAUNCH_ACCELERATION && flight_stage == 0){ //flight stage 1 (d'Flight stage 1 dierf net gesaat ginn wann grad 2/3 schon amgangen sinn)
+			flight_stage = 1;
+		} else {
+			flight_stage = 0;
+		}
+
+	} else if (bme_data[2] < THRESHOLD && momentary_acceleration > IMPACT_ACCELERATION) {// Wann is_falling = true
+			flight_stage = 4;
+	} else {
+		if(current_time - fall_start_time > FALL_DELAY){
+			flight_stage = 3;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+/*void calc_flight_stage() {
+	//maluell
+    if (Serial.available() > 0) {
+        char inputChar = Serial.read();
+
+        if (inputChar >= '0' && inputChar <= '5') {
+            flight_stage = inputChar - '0';
+            flight_stage_data[0] = (float)flight_stage;
+            Serial.print("Manual flight_stage ");
+            Serial.println(flight_stage);
+        }
+    }
+} */
