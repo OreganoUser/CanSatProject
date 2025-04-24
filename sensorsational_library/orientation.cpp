@@ -32,7 +32,7 @@ void update_mag_heading(int execution_number)
 	  	// from https://avionicsduino.com/index.php/en/digital-compass/
 	  	Xh = calibrated_lsm_data[6] * cos(orientation_data[3] / 180 * PI) - calibrated_lsm_data[8] * sin(orientation_data[3] / 180 * PI);
 	  	Yh = -calibrated_lsm_data[6] * sin(orientation_data[2] / 180 * PI) * sin(orientation_data[3]/ 180 * PI) - calibrated_lsm_data[7] * cos(orientation_data[2] / 180 * PI) + calibrated_lsm_data[6] * sin(orientation_data[2] / 180 * PI) * cos(orientation_data[3] / 180 * PI);
-	  	orientation_data[0] = 180 - atan2(Yh, Xh) * 180 / PI;
+	  	orientation_data[0] = fmod(180 - atan2(Yh, Xh) * 180 / PI + 180, 360); //Flip coordinate system (+180) so that the motors push forward
 	  	if (orientation_data[0] < 0)
 	    	orientation_data[0] += 360;		
 	}
