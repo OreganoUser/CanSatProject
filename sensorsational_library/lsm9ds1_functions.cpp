@@ -22,7 +22,7 @@ bool setup_lsm9ds1(Adafruit_LSM9DS1& lsm_object)
   else
     Serial.println("LSM9DS1 init success.");
 
-  lsm_object.setupAccel(lsm_object.LSM9DS1_ACCELRANGE_2G, lsm_object.LSM9DS1_ACCELDATARATE_50HZ);
+  lsm_object.setupAccel(lsm_object.LSM9DS1_ACCELRANGE_4G, lsm_object.LSM9DS1_ACCELDATARATE_50HZ);
   lsm_object.setupMag(lsm_object.LSM9DS1_MAGGAIN_4GAUSS);
   lsm_object.setupGyro(lsm_object.LSM9DS1_GYROSCALE_245DPS);
   if (!lsm9ds1_setup_status)
