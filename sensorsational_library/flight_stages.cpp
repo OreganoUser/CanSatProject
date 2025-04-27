@@ -168,31 +168,38 @@ void calc_flight_stage(){
 	unsigned long current_time = millis();
 
 
-	if(!is_falling){
-		if(bme_data[2] > THRESHOLD){ //flight_stage 2 & 3
-			if(momentary_acceleration < FALL_ACCELERATION){
-				is_falling = true;
-				fall_start_time = current_time;
-
+	void calc_flight_stage(){
+		//
+	
+		momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
+	
+		unsigned long current_time = millis();
+	
+	
+		if(!is_falling){
+			if(bme_data[2] > THRESHOLD){ //flight_stage 2 & 3
+				if(momentary_acceleration < FALL_ACCELERATION){
+					is_falling = true;
+	
+				} else {
+					flight_stage = 2;
+				}
+	
+			} else if (momentary_acceleration > LAUNCH_ACCELERATION && flight_stage == 0){ //flight stage 1 (d'Flight stage 1 dierf net gesaat ginn wann grad 2/3 schon amgangen sinn)
+				flight_stage = 1;
 			} else {
-				flight_stage = 2;
+				flight_stage = 0;
 			}
-
-		} else if (momentary_acceleration > LAUNCH_ACCELERATION && flight_stage == 0){ //flight stage 1 (d'Flight stage 1 dierf net gesaat ginn wann grad 2/3 schon amgangen sinn)
-			flight_stage = 1;
-		} else {
-			flight_stage = 0;
-		}
-
-	} else if (bme_data[2] < THRESHOLD && momentary_acceleration > IMPACT_ACCELERATION) {// Wann is_falling = true
-			flight_stage = 4;
-	} else {
-		if(current_time - fall_start_time > FALL_DELAY){
-			flight_stage = 3;
+	
+		} else if (bme_data[2] < THRESHOLD && momentary_acceleration > IMPACT_ACCELERATION) {// Wann is_falling = true
+				flight_stage = 4;
+		} else if(is_falling && momentary_acceleration == LAUNCH_ACCELERATION){
+			fall_start_time = current_time;
+			if(current_time - fall_start_time > FALL_DELAY){
+				flight_stage = 3;
+			}
 		}
 	}
-}
-
 
 
 
