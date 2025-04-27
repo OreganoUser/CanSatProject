@@ -15,6 +15,13 @@ bool setup_bme(Adafruit_BME280& bme_object)
   if (bme_object.begin(0x77, &Wire))
   {
     Serial.println("BME init success.");
+    bme.setSampling(
+    Adafruit_BME280::MODE_FORCED,       
+    Adafruit_BME280::SAMPLING_X2,        // Temperature oversampling = 2x (more stable, still fast)
+    Adafruit_BME280::SAMPLING_X16,       // Pressure oversampling = 16x (very stable altitude readings)
+    Adafruit_BME280::SAMPLING_X1,        // Humidity oversampling = 1x (if you care about humidity, raise this too)
+    Adafruit_BME280::FILTER_X16           // IIR filter on, level 16 (smooths fast noise/bursts)
+    );
     return true;
   }
   else
