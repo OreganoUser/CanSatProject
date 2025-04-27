@@ -160,14 +160,6 @@ int flight_stage_precisions[1] = {0};
 } */
 
 
-void calc_flight_stage(){
-	//
-
-	momentary_acceleration = sqrt(pow(calibrated_lsm_data[0], 2) + pow(calibrated_lsm_data[1], 2) + pow(calibrated_lsm_data[2], 2));
-
-	unsigned long current_time = millis();
-
-
 	void calc_flight_stage(){
 		//
 	
