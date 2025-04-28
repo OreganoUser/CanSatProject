@@ -14,8 +14,8 @@ extern Servo escRight;
 
 void initMotors();
 void adjustDirection();
-void turnLeft();
-void turnRight();
+void turnLeft(float delta);
+void turnRight(float delta);
 void moveForward();
 
 #endif

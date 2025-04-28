@@ -31,7 +31,7 @@ int flight_stage_precisions[1] = {0};
 
 
 
-void calc_flight_stage() {
+/*void calc_flight_stage() {
 
 	max_altitude = fmax(bme_data[2], max_altitude);
 	min_altitude = fmin(bme_data[2], min_altitude);
@@ -51,10 +51,35 @@ void calc_flight_stage() {
 		flight_stage = 2;
 	}
 
-	if ((bme_data[2] > (min_altitude + LAUNCH_THRESHOLD) && (flight_stage == 0))
+	if (bme_data[2] > (min_altitude + LAUNCH_THRESHOLD) && (flight_stage == 0))
 	{
 		flight_stage = 1;
 	}
 	
 	flight_stage_data[0] = flight_stage;
+}*/
+
+void calc_flight_stage() {
+ 
+	//maluell
+ 
+    if (Serial.available() > 0) {
+ 
+        char inputChar = Serial.read();
+ 
+
+ 
+        if (inputChar >= '0' && inputChar <= '5') {
+ 
+            flight_stage = inputChar - '0';
+ 
+            flight_stage_data[0] = (float)flight_stage;
+ 
+            Serial.print("Manual flight_stage ");
+ 
+            Serial.println(flight_stage);
+ 
+        }
+ 
+    }
 }

@@ -16,7 +16,7 @@ Servo escRight;
 
 void initMotors() {
   servo_arms.attach(SERVO_PIN);
-  servo_arms.write(190);
+  servo_arms.write(200);
   escLeft.attach(MOTOR1_PIN);
   escRight.attach(MOTOR2_PIN);
 }
@@ -62,23 +62,25 @@ void adjustDirection()
   if (delta < TOLERANCE || delta > 360 - TOLERANCE) {
     moveForward();
   } else if (delta > 180) {
-    turnLeft();
+    turnLeft(delta);
   } else {
-    turnRight();
+    turnRight(delta);
   }
 }
 }
 
-void turnLeft() {
-    Serial.println("Turning Left");
-    escLeft.writeMicroseconds(1500);
-    escRight.writeMicroseconds(2000);
+void turnLeft(float delta) {
+  Serial.println("Turning Left");
+  int speedAdjustment = constrain(delta * 2, 0, 100);
+  escLeft.writeMicroseconds(2000 - speedAdjustment);
+  escRight.writeMicroseconds(2000);
 }
  
-void turnRight() {
-    Serial.println("Turning Right");
-    escLeft.writeMicroseconds(2000);
-    escRight.writeMicroseconds(1500);
+void turnRight(float delta) {
+  Serial.println("Turning Right");
+  int speedAdjustment = constrain(delta * 2, 0, 100);
+  escLeft.writeMicroseconds(2000);
+  escRight.writeMicroseconds(2000 - speedAdjustment);
 }
  
 void moveForward() {
