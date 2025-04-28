@@ -60,8 +60,9 @@
 // define threshold and meters_delay to determine flight stage
 // threshold contains the altitude at which we can say that the cansat has actually been lifted by the rocket
 #define LAUNCH_THRESHOLD 20 // m
-#define DROP_THRESHOLD 15
-#define LAUNCH_ACCELERATION 11 //m/s²
+#define ALTITUDE_THRESHOLD 80
+#define DROP_THRESHOLD 20
+#define LAUNCH_ACCELERATION 16 //m/s²
 #define FALL_ACCELERATION 3 // m/s²
 #define FALL_DELAY 3000 //ms
 #define IMPACT_ACCELERATION 20 // m/s²
