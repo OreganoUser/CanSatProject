@@ -32,6 +32,7 @@ bool setup_bme(Adafruit_BME280& bme_object)
 }
 
 void get_bme_data(float bme_data[]) {
+  bme.takeForcedMeasurement(); // for Forced mode (should be stabler reading of altitude)
   // Read all sensor values and store them all in bme_data array
   bme_data[0] = bme.readTemperature();  // Temperature (°C)
   bme_data[1] = bme.readPressure() / 100.0F; // Pressure (hPa)
