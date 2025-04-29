@@ -21,7 +21,7 @@ bool setup_bme(Adafruit_BME280& bme_object)
     Adafruit_BME280::SAMPLING_X16,       // Pressure oversampling = 16x (very stable altitude readings)
     Adafruit_BME280::SAMPLING_X1,        // Humidity oversampling = 1x (if you care about humidity, raise this too)
     Adafruit_BME280::FILTER_OFF,          // IIR filter oFF
-    Adafruit_BME280::STANDBY_MS_125
+    Adafruit_BME280::STANDBY_MS_250
     );
     return true;
   }
