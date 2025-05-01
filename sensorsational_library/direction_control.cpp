@@ -59,6 +59,8 @@ void adjustDirection()
   // Winkelabweichung
   float delta = fmod(targetHeading - currentHeading + 360, 360);
 
+  Serial.println(delta);
+
   if (delta < TOLERANCE || delta > 360 - TOLERANCE) {
     moveForward();
   } else if (delta > 180) {
@@ -71,16 +73,20 @@ void adjustDirection()
 
 void turnLeft(float delta) {
   Serial.println("Turning Left");
-  int speedAdjustment = constrain(delta * 2, 0, 100);
-  escLeft.writeMicroseconds(2000 - speedAdjustment);
+  int speedAdjustment = constrain(-(delta-360), 0, 100);
+  Serial.print("adj");
+  Serial.println(speedAdjustment);
+  escLeft.writeMicroseconds(2000 - speedAdjustment*0.2);
   escRight.writeMicroseconds(2000);
 }
  
 void turnRight(float delta) {
   Serial.println("Turning Right");
-  int speedAdjustment = constrain(delta * 2, 0, 100);
+  int speedAdjustment = constrain(delta, 0, 100);
+  Serial.print("adj");
+  Serial.println(speedAdjustment);
   escLeft.writeMicroseconds(2000);
-  escRight.writeMicroseconds(2000 - speedAdjustment);
+  escRight.writeMicroseconds(2000 - speedAdjustment*0.2);
 }
  
 void moveForward() {
